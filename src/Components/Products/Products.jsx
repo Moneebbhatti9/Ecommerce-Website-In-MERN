@@ -1,9 +1,14 @@
 import React from "react";
 import "./css/Product.css";
-import { Button } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../Redux/CartSlice";
 
 const Product = ({ product }) => {
-  // console.log(product);
+  const dispatch = useDispatch();
+
+  const addItemToCart = () => {
+    dispatch(addToCart(product));
+  };
   return (
     <>
       <div className="productItem">
@@ -25,7 +30,12 @@ const Product = ({ product }) => {
 
         {/* add to cart button */}
 
-        <button className="product_item-button">Add to Cart</button>
+        <button
+          onClick={() => addItemToCart(product)}
+          className="product_item-button"
+        >
+          Add to Cart
+        </button>
         <button
           className="product_item-button"
           style={{ backgroundColor: "#FFC72C" }}
