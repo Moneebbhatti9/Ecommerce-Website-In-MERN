@@ -1,17 +1,20 @@
 import "./App.css";
-import Header from "./Components/Header/Header";
-import Body from "./Components/Body/Body";
 import { Provider } from "react-redux";
-import Store from "./Components/Store/Store";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./Screens/Home/Home";
+import store from "./Components/Store/Store";
+import Cart from "./Screens/Cart/Cart";
 
 function App() {
   return (
-    <div className="App">
-      <Provider store={Store}>
-        <Header />
-        <Body />
+    <Router>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/cart" element={<Cart />}></Route>
+        </Routes>
       </Provider>
-    </div>
+    </Router>
   );
 }
 

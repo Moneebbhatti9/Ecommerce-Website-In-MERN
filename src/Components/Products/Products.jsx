@@ -1,13 +1,18 @@
 import React from "react";
 import "./css/Product.css";
-import { useDispatch } from "react-redux";
-import { addToCart } from "../Redux/CartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../Redux/CartSlice";
 
 const Product = ({ product }) => {
+  const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
 
   const addItemToCart = () => {
     dispatch(addToCart(product));
+  };
+
+  const removeItemFromCart = () => {
+    dispatch(removeFromCart(product));
   };
   return (
     <>
@@ -30,12 +35,22 @@ const Product = ({ product }) => {
 
         {/* add to cart button */}
 
-        <button
-          onClick={() => addItemToCart(product)}
-          className="product_item-button"
-        >
-          Add to Cart
-        </button>
+        {cart.some((x) => x.id === product.id) ? (
+          <button
+            onClick={() => removeItemFromCart(product)}
+            className="product_item-button"
+          >
+            Remove From Cart
+          </button>
+        ) : (
+          <button
+            onClick={() => addItemToCart(product)}
+            className="product_item-button"
+          >
+            Add to Cart
+          </button>
+        )}
+
         <button
           className="product_item-button"
           style={{ backgroundColor: "#FFC72C" }}

@@ -31,6 +31,7 @@
 
 .shopping_cart-icon {
     color: white;
+    cursor: pointer;
 }
 
 .header_search_container {

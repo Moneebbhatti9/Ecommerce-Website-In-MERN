@@ -17,6 +17,7 @@
 }
 
 .product_item-button {
+    cursor: pointer;
     background-color: #FFD700;
     padding: 10px;
     border: none;
