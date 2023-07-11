@@ -7,6 +7,8 @@ import {
   decrementQuantity,
   removeFromCart,
 } from "../../Components/Redux/CartSlice";
+import PlaceIcon from "@mui/icons-material/Place";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
 
 const Cart = (product) => {
   const cart = useSelector((state) => state.cart.cart);
@@ -84,7 +86,49 @@ const Cart = (product) => {
         {/* Right Part */}
 
         <div className="cartRight">
-          <h1>Cart Left</h1>
+          <div className="locationWarraper">
+            <PlaceIcon style={{ color: "lightgray" }} />
+            <div className="locationDescription">
+              <p style={{ marginTop: "3px", cursor: "pointer" }}>
+                Select Your Location
+              </p>
+              <p style={{ marginTop: "3px" }}>
+                Select Your Location So that we can find you easily
+              </p>
+              <button className="locationButton">Select Location</button>
+            </div>
+          </div>
+
+          <div className="locationWarraper">
+            <PlaceIcon style={{ color: "lightgray" }} />
+            <div className="locationDescription">
+              <p style={{ marginTop: "3px" }}>Choose Your Saved Location</p>
+              <button className="locationButton">Choose Location</button>
+            </div>
+          </div>
+
+          {/* Coupon Section */}
+
+          <div className="couponWarraper">
+            <ConfirmationNumberIcon style={{ color: "lightgray" }} />
+            <div>
+              <h4 className="couponDescriptionHeading">Apply Coupon</h4>
+              <p
+                className="couponDescriptionDescription"
+                style={{ marginTop: "3px" }}
+              >
+                Apply Coupons to avail offers on products
+              </p>
+            </div>
+          </div>
+
+          {/* CheckOut Part */}
+
+          <div className="checkOutPart">
+            <div>
+              <h5>Total Price</h5>
+            </div>
+          </div>
         </div>
       </div>
     </>

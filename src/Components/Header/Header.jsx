@@ -5,6 +5,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const Header = () => {
   const cart = useSelector((state) => state.cart.cart);
@@ -38,14 +39,20 @@ const Header = () => {
           />
         </div>
 
-        <div>
-          <h4 className="headerText">hello Moneeb!</h4>
-          <h4 className="headerText">Accounts & Lists</h4>
+        <div style={{ display: "flex" }}>
+          <div>
+            <h4 className="headerText">hello Moneeb!</h4>
+            <h4 className="headerText">Accounts & Lists</h4>
+          </div>{" "}
+          <ArrowDropDownIcon style={{ color: "white", cursor: "pointer" }} />
         </div>
 
-        <div>
-          <h4 className="headerText">Returns</h4>
-          <h4 className="headerText"> & Orders</h4>
+        <div style={{ display: "flex" }}>
+          <div>
+            <h4 className="headerText">Returns</h4>
+            <h4 className="headerText"> & Orders</h4>
+          </div>
+          <ArrowDropDownIcon style={{ color: "white", cursor: "pointer" }} />
         </div>
 
         {/* Cart Icon */}

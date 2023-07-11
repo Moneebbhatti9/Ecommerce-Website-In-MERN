@@ -4,7 +4,8 @@
 }
 
 .cartRight {
-    background-color: green;
+    margin: 15px;
+    padding: 10px;
     flex: 0.3;
 
 }
@@ -40,6 +41,44 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+}
+
+.locationWarraper {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.locationButton {
+    background-color: #FFD700;
+    padding: 8px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+
+}
+
+.couponWarraper {
+    display: flex;
+    gap: 5px;
+    margin-top: 15px;
+
+}
+
+.couponDescriptionHeading {
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.couponDescriptionDescription {
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .removeProductButton {
