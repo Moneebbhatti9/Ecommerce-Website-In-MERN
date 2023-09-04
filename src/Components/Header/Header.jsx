@@ -4,7 +4,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const Header = () => {
@@ -19,11 +19,13 @@ const Header = () => {
       <div className="header">
         {/* website logo */}
         <div>
-          <img
-            className="image-logo"
-            src="https://links.papareact.com/f90"
-            alt="logo"
-          />
+          <Link to="/">
+            <img
+              className="image-logo"
+              src="https://links.papareact.com/f90"
+              alt="logo"
+            />
+          </Link>
         </div>
 
         {/* Search input */}

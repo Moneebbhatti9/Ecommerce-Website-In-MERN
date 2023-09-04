@@ -1,6 +1,8 @@
 .cart {
     display: flex;
     flex: 1;
+    justify-content: space-between;
+
 }
 
 .cartRight {
@@ -95,4 +97,22 @@
 .cartButton {
     border-style: inset;
     padding: 3px;
+}
+
+.checkOutTotal {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkOutPlaceOrder {
+    margin-top: 10px;
+    background-color: #FFD700;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
 }
