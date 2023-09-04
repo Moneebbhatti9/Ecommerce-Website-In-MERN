@@ -13,6 +13,7 @@ const OrderScreen = lazy(() => import("./Screens/Order/OrderScreen"));
 
 function App() {
   return (
+    //
     <Router>
       <Provider store={store}>
         <Suspense
