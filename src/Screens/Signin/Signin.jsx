@@ -14,7 +14,11 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { jwtAxios } from "../../Services/Auth/jwtAxios";
+import {
+  isTokenExpired,
+  jwtAxios,
+  setAuthToken,
+} from "../../Services/Auth/jwtAxios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import jwtDecode from "jwt-decode";
@@ -33,29 +37,11 @@ export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const checkTokenValidity = async (token) => {
-    if (!token) return false;
-
-    try {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp > currentTime) {
-        return true;
-      } else {
-        localStorage.removeItem("token");
-        return false;
-      }
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      return false;
-    }
-  };
-
   const fetchAuthUser = async () => {
     const token = localStorage.getItem("token");
 
     if (!token) return false;
-
+    setAuthToken(token);
     try {
       const res = await jwtAxios.get("/authUser");
       dispatch(setUser(res.data));
@@ -68,9 +54,7 @@ export default function SignIn() {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const isTokenValid = await checkTokenValidity(
-        localStorage.getItem("token")
-      );
+      const isTokenValid = await isTokenExpired(localStorage.getItem("token"));
       const isAuthUserValid = await fetchAuthUser();
 
       if (isTokenValid || isAuthUserValid) {

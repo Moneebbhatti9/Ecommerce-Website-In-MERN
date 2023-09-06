@@ -3,7 +3,11 @@ import "./css/Body.css";
 import axios from "axios";
 import Products from "../Products/Products";
 import { useSelector, useDispatch } from "react-redux";
-import { jwtAxios } from "../../Services/Auth/jwtAxios";
+import {
+  jwtAxios,
+  setAuthToken,
+  isTokenExpired,
+} from "../../Services/Auth/jwtAxios";
 import { setUser } from "../../Components/Redux/authSlice";
 import jwtDecode from "jwt-decode";
 
@@ -13,29 +17,11 @@ const Body = () => {
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
 
-  const checkTokenValidity = async (token) => {
-    if (!token) return false;
-
-    try {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp > currentTime) {
-        return true;
-      } else {
-        localStorage.removeItem("token");
-        return false;
-      }
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      return false;
-    }
-  };
-
   const fetchAuthUser = async () => {
     const token = localStorage.getItem("token");
 
     if (!token) return false;
-
+    setAuthToken(token);
     try {
       const res = await jwtAxios.get("/authUser");
       dispatch(setUser(res.data));
@@ -48,9 +34,7 @@ const Body = () => {
 
   useEffect(() => {
     const checkAuthentication = async () => {
-      const isTokenValid = await checkTokenValidity(
-        localStorage.getItem("token")
-      );
+      const isTokenValid = await isTokenExpired(localStorage.getItem("token"));
       const isAuthUserValid = await fetchAuthUser();
 
       if (isTokenValid || isAuthUserValid) {
