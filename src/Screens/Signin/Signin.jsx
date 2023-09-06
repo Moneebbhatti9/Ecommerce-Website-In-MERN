@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,9 +11,15 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { jwtAxios } from "../../Services/Auth/jwtAxios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import jwtDecode from "jwt-decode";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../Components/Redux/authSlice";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -23,6 +29,95 @@ const validationSchema = Yup.object({
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const checkTokenValidity = async (token) => {
+    if (!token) return false;
+
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp > currentTime) {
+        return true;
+      } else {
+        localStorage.removeItem("token");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      return false;
+    }
+  };
+
+  const fetchAuthUser = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return false;
+
+    try {
+      const res = await jwtAxios.get("/authUser");
+      dispatch(setUser(res.data));
+      return res.status === 200;
+    } catch (error) {
+      console.error("Error fetching authUser:", error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      const isTokenValid = await checkTokenValidity(
+        localStorage.getItem("token")
+      );
+      const isAuthUserValid = await fetchAuthUser();
+
+      if (isTokenValid || isAuthUserValid) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuthentication();
+  }, []);
+
+  const loginUser = async (userData) => {
+    try {
+      const res = await jwtAxios.post("/login", userData);
+      if (res.data.token !== "" && res.status === 200) {
+        localStorage.setItem("token", res.data.token);
+        dispatch(setUser(res.data));
+        navigate("/");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        toast.error("Invalid Credentials", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else if (error.response && error.response.status >= 500) {
+        toast.error("Server Error! Please Try Again Later", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,7 +125,7 @@ export default function SignIn() {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      loginUser(values);
     },
   });
 
@@ -115,6 +210,18 @@ export default function SignIn() {
           </Box>
         </Box>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </ThemeProvider>
   );
 }

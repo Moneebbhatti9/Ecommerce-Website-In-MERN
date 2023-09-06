@@ -11,9 +11,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { jwtAxios } from "../../Services/Auth/jwtAxios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("Required"),
@@ -30,6 +33,42 @@ const validationSchema = Yup.object({
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const navigate = useNavigate();
+  const registerUser = async (userData) => {
+    try {
+      const res = await jwtAxios.post("/register", userData);
+      toast.success("User Registered Successsfully", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      setTimeout(() => {
+        navigate("/signin");
+      }, 3000);
+    } catch (error) {
+      console.error("User registration failed", error);
+      if (error.response && error.response.status === 400) {
+        toast.error("User Already Exists", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        // Handle other errors (e.g., network issues) here
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -40,7 +79,7 @@ export default function SignUp() {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values); // You can replace this with your form submission logic
+      registerUser(values);
     },
   });
 
@@ -188,6 +227,18 @@ export default function SignUp() {
           </Box>
         </Box>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </ThemeProvider>
   );
 }

@@ -6,6 +6,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Button from "@mui/material/Button";
+import { selectUser } from "../Redux/authSlice";
 
 const Header = () => {
   const cart = useSelector((state) => state.cart.cart);
@@ -13,7 +15,8 @@ const Header = () => {
   const navigateToCart = () => {
     navigate("/cart");
   };
-
+  const user = useSelector(selectUser);
+  console.log(user);
   return (
     <>
       <div className="header">
@@ -27,9 +30,7 @@ const Header = () => {
             />
           </Link>
         </div>
-
         {/* Search input */}
-
         <div className="header_search_container">
           <input
             className="header_input"
@@ -40,33 +41,30 @@ const Header = () => {
             style={{ color: "white", marginLeft: "4px", marginTop: "3px" }}
           />
         </div>
-
-        <div style={{ display: "flex" }}>
-          <div>
-            <h4 className="headerText">hello Moneeb!</h4>
-            <h4 className="headerText">Accounts & Lists</h4>
-          </div>{" "}
-          <ArrowDropDownIcon style={{ color: "white", cursor: "pointer" }} />
-        </div>
-
-        <div style={{ display: "flex" }}>
-          <div>
-            <h4 className="headerText">Returns</h4>
-            <h4 className="headerText"> & Orders</h4>
+        {user ? (
+          <div style={{ display: "flex" }}>
+            <div>
+              <h4 className="headerText">Hello {user.firstName}</h4>
+              <h4 className="headerText">Accounts & Lists</h4>
+            </div>{" "}
+            <ArrowDropDownIcon style={{ color: "white", cursor: "pointer" }} />
           </div>
-          <ArrowDropDownIcon style={{ color: "white", cursor: "pointer" }} />
-        </div>
-
-        {/* Cart Icon */}
+        ) : null}
 
         <div onClick={navigateToCart} className="Shopping-cart">
           <ShoppingCartOutlinedIcon className="shopping_cart-icon" />
           <span className="span-container">{cart.length}</span>
         </div>
-
+        <div style={{ display: "flex" }}>
+          <Link to="/signin">
+            <Button variant="contained">SIGN IN</Button>
+          </Link>
+        </div>
+        {/* Cart Icon */}
         <div>
-          <h4 className="headerText">Pakistan</h4>
-          <h4 className="headerText">043434324</h4>
+          <Link to="/signup">
+            <Button variant="outlined">SIGN UP</Button>
+          </Link>
         </div>
       </div>
 
