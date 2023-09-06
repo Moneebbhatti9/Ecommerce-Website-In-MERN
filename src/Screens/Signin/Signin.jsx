@@ -21,9 +21,9 @@ import {
 } from "../../Services/Auth/jwtAxios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import jwtDecode from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../Components/Redux/authSlice";
+import jsonData from "../../Services/Apis/Api.json";
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
@@ -36,6 +36,8 @@ export default function SignIn() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const LoginApi = jsonData["Login"];
+  const AuthUserApi = jsonData["AuthenticatedUser"];
 
   const fetchAuthUser = async () => {
     const token = localStorage.getItem("token");
@@ -43,7 +45,7 @@ export default function SignIn() {
     if (!token) return false;
     setAuthToken(token);
     try {
-      const res = await jwtAxios.get("/authUser");
+      const res = await jwtAxios.get(AuthUserApi);
       dispatch(setUser(res.data));
       return res.status === 200;
     } catch (error) {
@@ -69,7 +71,7 @@ export default function SignIn() {
 
   const loginUser = async (userData) => {
     try {
-      const res = await jwtAxios.post("/login", userData);
+      const res = await jwtAxios.post(LoginApi, userData);
       if (res.data.token !== "" && res.status === 200) {
         localStorage.setItem("token", res.data.token);
         dispatch(setUser(res.data));

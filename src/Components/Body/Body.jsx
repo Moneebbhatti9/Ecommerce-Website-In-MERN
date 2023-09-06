@@ -9,13 +9,14 @@ import {
   isTokenExpired,
 } from "../../Services/Auth/jwtAxios";
 import { setUser } from "../../Components/Redux/authSlice";
-import jwtDecode from "jwt-decode";
+import jsonData from "../../Services/Apis/Api.json";
 
 const Body = () => {
   const [products, setProducts] = useState([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const cart = useSelector((state) => state.cart.cart);
   const dispatch = useDispatch();
+  const AuthUserApi = jsonData["AuthenticatedUser"];
 
   const fetchAuthUser = async () => {
     const token = localStorage.getItem("token");
@@ -23,7 +24,7 @@ const Body = () => {
     if (!token) return false;
     setAuthToken(token);
     try {
-      const res = await jwtAxios.get("/authUser");
+      const res = await jwtAxios.get(AuthUserApi);
       dispatch(setUser(res.data));
       return res.status === 200;
     } catch (error) {

@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import { jwtAxios } from "../../Services/Auth/jwtAxios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import jsonData from "../../Services/Apis/Api.json";
 
 const validationSchema = Yup.object({
   firstName: Yup.string().required("Required"),
@@ -31,12 +32,13 @@ const validationSchema = Yup.object({
 });
 
 const defaultTheme = createTheme();
+const RegisterApi = jsonData["Register"];
 
 export default function SignUp() {
   const navigate = useNavigate();
   const registerUser = async (userData) => {
     try {
-      const res = await jwtAxios.post("/register", userData);
+      const res = await jwtAxios.post(RegisterApi, userData);
       toast.success("User Registered Successsfully", {
         position: "top-right",
         autoClose: 3000,

@@ -1,8 +1,7 @@
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 
-const API_BASE_URL = "http://localhost:5000/api/user";
-const token = localStorage.getItem("token");
+const API_BASE_URL = "http://localhost:5000/api/";
 
 const jwtAxios = axios.create({
   baseURL: API_BASE_URL,

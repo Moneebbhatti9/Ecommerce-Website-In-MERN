@@ -1,0 +1,5 @@
+{
+  "Login": "user/login",
+  "Register": "user/register",
+  "AuthenticatedUser": "user/authUser"
+}
